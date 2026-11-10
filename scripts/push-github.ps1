@@ -6,7 +6,9 @@ $ErrorActionPreference = 'Continue'
 
 $repo = Get-UpdateRepo
 if (-not $repo) { $repo = 'lucasshl/aurora-launcher' }
-$url = "https://github.com/$repo.git"
+$owner = $repo.Split('/')[0]
+# O nome do dono na URL faz o Git usar o login dessa conta, mesmo que o PC tenha outra conta do GitHub salva
+$url = "https://$owner@github.com/$repo.git"
 
 if (-not (Has 'git')) {
     Step 'Git não encontrado: instalando'
@@ -73,5 +75,11 @@ if ($LASTEXITCODE -eq 0) {
 }
 
 Step 'Enviando para o GitHub (na primeira vez abre o navegador para você entrar na conta)'
-Invoke-Checked 'git' @('push', '-u', 'origin', 'main')
+& git push -u origin main
+if ($LASTEXITCODE -ne 0) {
+    Warn "O GitHub recusou. A conta usada precisa ser a $owner (dona do repositório)."
+    Warn 'Na janela de login que abrir, entre com essa conta. Para limpar logins antigos salvos no Windows:'
+    Warn "  Painel de Controle > Gerenciador de Credenciais > Credenciais do Windows > apague as de github.com"
+    Fail 'envio para o GitHub falhou.'
+}
 Ok "Pronto: https://github.com/$repo"

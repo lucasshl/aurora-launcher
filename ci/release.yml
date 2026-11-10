@@ -1,0 +1,45 @@
+# Alternativa ao publicar-atualizacao.bat: ao enviar uma tag vX.Y.Z, o GitHub compila,
+# assina e publica o Release com o latest.json que o launcher consulta.
+# Requer o secret TAURI_SIGNING_PRIVATE_KEY (configurar-atualizacao.bat cadastra via gh).
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ". -> target"
+
+      - run: npm ci
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AURORA_MS_CLIENT_ID: ${{ secrets.AURORA_MS_CLIENT_ID }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Aurora Launcher ${{ github.ref_name }}"
+          releaseBody: "Atualização automática disponível no launcher."
+          releaseDraft: false
+          prerelease: false
+          includeUpdaterJson: true

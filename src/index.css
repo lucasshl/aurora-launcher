@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0d0e12;
+  --color-panel: #15171c;
+  --color-panel-2: #1c1f26;
+  --color-panel-3: #242832;
+  --color-line: #2a2e38;
+  --color-muted: #8a91a3;
+  --color-accent: #5865f2;
+  --color-accent-hover: #4752c4;
+  --color-ok: #23a55a;
+  --color-warn: #f0b232;
+  --color-err: #f23f43;
+  --color-ms: #00a4ef;
+
+  --font-sans: "Inter", "Segoe UI Variable", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --animate-fade-in: fade-in 160ms ease-out;
+  --animate-pop-in: pop-in 180ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  --animate-shimmer: shimmer 1.6s linear infinite;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Scrollbars discretas no estilo Discord */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-panel-3) transparent;
+}
+
+input,
+textarea,
+.selectable {
+  user-select: text;
+}
+
+/* Slider de memória */
+input[type="range"].memory {
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(to right, var(--color-accent) var(--fill, 50%), var(--color-panel-3) var(--fill, 50%));
+}
+input[type="range"].memory::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: white;
+  box-shadow: 0 0 0 4px rgb(88 101 242 / 0.35);
+  cursor: grab;
+  transition: transform 120ms;
+}
+input[type="range"].memory::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+  cursor: grabbing;
+}

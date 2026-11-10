@@ -1,0 +1,22 @@
+{
+	"schemaVersion": 1,
+	"id": "aurora_cosmetics",
+	"version": "${version}",
+	"name": "Aurora Cosmetics",
+	"description": "Cosméticos 3D (asas, chapéus, pets) do Aurora Launcher, sincronizados entre jogadores.",
+	"authors": ["Aurora Launcher"],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["dev.aurora.cosmetics.AuroraCosmetics"]
+	},
+	"mixins": [
+		{ "config": "aurora_cosmetics.mixins.json", "environment": "client" }
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

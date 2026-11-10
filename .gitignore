@@ -1,0 +1,14 @@
+node_modules/
+dist/
+target/
+src-tauri/gen/
+*.log
+.DS_Store
+.keys/
+release/
+
+# Mod
+mods/aurora-cosmetics/build/
+mods/aurora-cosmetics/.gradle/
+mods/aurora-cosmetics/build.log
+.tools/
